@@ -21,20 +21,28 @@
     flake-utils.lib.eachSystem supportedSystems (
       system: let
         pkgs = import ./pkgs.nix nixpkgs system;
+
+        makeShell = p:
+          p.mkShell {
+            buildInputs = with p; [
+              ammonite
+              coursier
+              jdk
+              mill
+              sbt
+              scala-cli
+              scalafmt
+            ];
+          };
       in {
-        devShells.default = pkgs.mkShell {
-          buildInputs = with pkgs; [
-            ammonite
-            coursier
-            jdk
-            mill
-            sbt
-            scala-cli
-            scalafmt
-          ];
+        devShells = {
+          default = makeShell pkgs.default;
+          java17 = makeShell pkgs.pkgs17;
+          java11 = makeShell pkgs.pkgs11;
+          java8 = makeShell pkgs.pkgs8;
         };
 
-        formatter = pkgs.alejandra;
+        formatter = pkgs.default.alejandra;
       }
     );
 }

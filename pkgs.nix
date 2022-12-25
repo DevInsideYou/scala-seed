@@ -1,9 +1,5 @@
 nixpkgs: system: let
-  nameMangling = {
-    java = "graalvm17-ce";
-  };
-
-  overlays = {
+  makeOverlays = java: {
     aarchOverlay = _: prev: let
       pkgsForx86 = import nixpkgs {
         localSystem = "x86_64-darwin";
@@ -14,7 +10,7 @@ nixpkgs: system: let
       };
 
     millOverlay = final: prev: {
-      jre = prev.${nameMangling.java};
+      jre = prev.${java};
 
       mill = prev.mill.override {
         jre = final.jre;
@@ -22,12 +18,13 @@ nixpkgs: system: let
     };
 
     javaOverlay = final: _: {
-      jdk = final.${nameMangling.java};
-      jre = final.${nameMangling.java};
+      jdk = final.${java};
+      jre = final.${java};
     };
 
     scalaCliOverlay = final: prev: {
-      jre = prev.${nameMangling.java};
+      # hardcoded because the scala-cli requires 17 or above
+      jre = prev.${"graalvm17-ce"};
 
       scala-cli = prev.scala-cli.override {
         jre = final.jre;
@@ -35,9 +32,18 @@ nixpkgs: system: let
     };
   };
 
-  pkgs = import nixpkgs {
-    inherit system;
-    overlays = builtins.attrValues overlays;
-  };
-in
-  pkgs
+  makePackages = java: let
+    overlays = makeOverlays java;
+  in
+    import nixpkgs {
+      inherit system;
+      overlays = builtins.attrValues overlays;
+    };
+
+  default = pkgs17;
+  pkgs17 = makePackages "graalvm17-ce";
+  pkgs11 = makePackages "graalvm11-ce";
+  pkgs8 = makePackages "openjdk8";
+in {
+  inherit default pkgs17 pkgs11 pkgs8;
+}

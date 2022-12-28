@@ -1,8 +1,6 @@
 nixpkgs: system: let
-  makeOverlays = java: {
+  makeOverlays = java: let
     millOverlay = final: prev: {
-      jre = prev.${java};
-
       mill = prev.mill.override {
         jre = final.jre;
       };
@@ -14,21 +12,23 @@ nixpkgs: system: let
     };
 
     scalaCliOverlay = final: prev: {
-      # hardcoded because the scala-cli requires 17 or above
-      jre = prev.${"graalvm17-ce"};
-
       scala-cli = prev.scala-cli.override {
-        jre = final.jre;
+        # hardcoded because scala-cli requires 17 or above
+        jre = final.graalvm17-ce;
       };
     };
-  };
+  in [
+    javaOverlay
+    scalaCliOverlay
+    millOverlay
+  ];
 
   makePackages = java: let
     overlays = makeOverlays java;
   in
     import nixpkgs {
       inherit system;
-      overlays = builtins.attrValues overlays;
+      overlays = overlays;
     };
 
   default = pkgs17;

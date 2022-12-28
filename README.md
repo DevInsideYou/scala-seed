@@ -96,8 +96,4 @@ PS
 
 Most Scala devs either use [Intellij IDEA](https://www.jetbrains.com/help/idea/discover-intellij-idea-for-scala.html) or the editors supported by [Metals](https://scalameta.org/metals/) - a Scala language server.
 
-This flake was tested in WSL 2 on Ubuntu-20.04 LTS, but it should work on Macs as well. M1 users might need to install Rosetta 2 because some packages are not available yet:
-```bash
-/usr/sbin/softwareupdate --install-rosetta --agree-to-license
-```
-I don't have a Mac, but I will set up CI eventually to test on them. Please report issues until then. Thank you!
+This flake was tested in WSL 2 on Ubuntu-20.04 LTS, but it should work on Macs as well. I don't have a Mac, but I will set up CI eventually to test on them. Please report issues until then. Thank you!

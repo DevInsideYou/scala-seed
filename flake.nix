@@ -2,8 +2,8 @@
   description = "A flake for getting started with Scala.";
 
   inputs = {
-    nixpkgs.url = github:nixos/nixpkgs/nixpkgs-unstable;
-    flake-utils.url = github:numtide/flake-utils;
+    nixpkgs.url = "github:nixos/nixpkgs";
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
   outputs = {

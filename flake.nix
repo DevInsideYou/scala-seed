@@ -2,7 +2,7 @@
   description = "A flake for getting started with Scala.";
 
   inputs = {
-    nixpkgs.url = "github:kubukoz/nixpkgs/scala-cli-move-assert";
+    nixpkgs.url = "github:nixos/nixpkgs";
     flake-utils.url = "github:numtide/flake-utils";
   };
 

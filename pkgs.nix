@@ -1,14 +1,5 @@
 nixpkgs: system: let
   makeOverlays = java: {
-    aarchOverlay = _: prev: let
-      pkgsForx86 = import nixpkgs {
-        localSystem = "x86_64-darwin";
-      };
-    in
-      prev.lib.optionalAttrs (prev.stdenv.isDarwin && prev.stdenv.isAarch64) {
-        inherit (pkgsForx86) scala-cli;
-      };
-
     millOverlay = final: prev: {
       jre = prev.${java};
 

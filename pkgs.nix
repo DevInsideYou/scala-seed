@@ -27,8 +27,7 @@ nixpkgs: system: let
     overlays = makeOverlays java;
   in
     import nixpkgs {
-      inherit system;
-      overlays = overlays;
+      inherit system overlays;
     };
 
   default = pkgs17;

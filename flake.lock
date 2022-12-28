@@ -17,11 +17,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1672256101,
+        "lastModified": 1672257453,
         "narHash": "sha256-XuKh7c+yt7ybml5CNEg9D1M/d81qCMOLCfYvZl/Zxrc=",
         "owner": "kubukoz",
         "repo": "nixpkgs",
-        "rev": "62563cc117ec012eee10c690415da8ba1d1e67e0",
+        "rev": "da40dbd19583179f78f894e003851971d83b906d",
         "type": "github"
       },
       "original": {

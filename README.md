@@ -75,6 +75,8 @@ The first time you use this subshell these tools will be downloaded and cached. 
     ```
 1. Just like any other subshell this one can be exited by typing `exit` or pressing `Ctrl+D`.
 
+[![Watch on YouTube](resources/thumbnail_youtube.jpg)](https://youtu.be/HnoP7JZn2MQ "Watch a Demo on YouTube!")
+
 # Scala first steps
 Now that you have a working dev environment you can create your first Scala project like this:
 

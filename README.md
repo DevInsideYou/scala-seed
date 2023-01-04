@@ -17,6 +17,7 @@ The first time you use this subshell these tools will be downloaded and cached. 
 
 # Installation
 1. Install the Nix package manager by selecting your OS in the [official guide](https://nixos.org/download.html). Don't forget to reopen the terminal!
+
 1. Enable the flakes feature:
 
     ```bash
@@ -27,53 +28,54 @@ The first time you use this subshell these tools will be downloaded and cached. 
     ```bash
     sudo systemctl restart nix-daemon
     ```
-1. Use the default subshell (there is **NO** need to clone this repo) by running:
 
-    ```bash
-    nix develop github:devinsideyou/scala-seed
-    ```
-    For [direnv](https://direnv.net/)/[nix-direnv](https://github.com/nix-community/nix-direnv) users put the following into your `.envrc`:
-    ```bash
-    use flake github:devinsideyou/scala-seed
-    ```
-    **Pro tip**: I will keep updating this flake so you might want to pin it to a [specific commit](https://github.com/DevInsideYou/scala-seed/commits/main):
-    ```bash
-    nix develop github:devinsideyou/scala-seed/0c3b8c657b37eae320b073724d74390cf3162edf
-    ```
-    ```bash
-    use flake github:devinsideyou/scala-seed/0c3b8c657b37eae320b073724d74390cf3162edf
-    ```
-   Alternative shells can be used as follows:
-    ```bash
-    nix develop github:devinsideyou/scala-seed#java17 # the same as the default
-    ```
-    ```bash
-    nix develop github:devinsideyou/scala-seed#java11
-    ```
-    ```bash
-    nix develop github:devinsideyou/scala-seed#java8
-    ```
-    Here is how you can see the metadata of the flake:
-    ```bash
-    nix flake metadata github:devinsideyou/scala-seed
-    ```
-    And here is how you can see everything the flake has to offer:
-    ```bash
-    nix flake show github:devinsideyou/scala-seed
-    ```
-1. Here is a useful incantation to pretty print a filtered list of what's on the path:
-    ```bash
-    echo -e ${buildInputs// /\\n} | cut -d - -f 2- | sort
-    ```
-   And here is another one that also shows the locations:
-    ```bash
-    echo -e ${buildInputs// /\\n} | sort -t- -k2,2 -k3,3
-    ```
-   And here is yet another one that shows **everything** Nix put on the path:
-    ```bash
-    echo $PATH | sed 's/:/\n/g' | grep /nix/store | sort --unique -t- -k2,2 -k3,3
-    ```
-1. Just like any other subshell this one can be exited by typing `exit` or pressing `Ctrl+D`.
+# Usage
+Use the default subshell (there is **NO** need to clone this repo) by running:
+```bash
+nix develop github:devinsideyou/scala-seed
+```
+For [direnv](https://direnv.net/)/[nix-direnv](https://github.com/nix-community/nix-direnv) users put the following into your `.envrc`:
+```bash
+use flake github:devinsideyou/scala-seed
+```
+**Pro tip**: I will keep updating this flake so you might want to pin it to a [specific commit](https://github.com/DevInsideYou/scala-seed/commits/main):
+```bash
+nix develop github:devinsideyou/scala-seed/0c3b8c657b37eae320b073724d74390cf3162edf
+```
+```bash
+use flake github:devinsideyou/scala-seed/0c3b8c657b37eae320b073724d74390cf3162edf
+```
+Alternative shells can be used as follows:
+```bash
+nix develop github:devinsideyou/scala-seed#java17 # the same as the default
+```
+```bash
+nix develop github:devinsideyou/scala-seed#java11
+```
+```bash
+nix develop github:devinsideyou/scala-seed#java8
+```
+Here is how you can see the metadata of the flake:
+```bash
+nix flake metadata github:devinsideyou/scala-seed
+```
+And here is how you can see everything the flake has to offer:
+```bash
+nix flake show github:devinsideyou/scala-seed
+```
+Here is a useful incantation to pretty print a filtered list of what's on the path:
+```bash
+echo -e ${buildInputs// /\\n} | cut -d - -f 2- | sort
+```
+And here is another one that also shows the locations:
+```bash
+echo -e ${buildInputs// /\\n} | sort -t- -k2,2 -k3,3
+```
+And here is yet another one that shows **everything** Nix put on the path:
+```bash
+echo $PATH | sed 's/:/\n/g' | grep /nix/store | sort --unique -t- -k2,2 -k3,3
+```
+Just like any other subshell this one can be exited by typing `exit` or pressing `Ctrl+D`.
 
 [![Watch on YouTube](resources/thumbnail_youtube.jpg)](https://youtu.be/HnoP7JZn2MQ "Watch a Demo on YouTube!")
 

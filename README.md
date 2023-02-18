@@ -83,10 +83,10 @@ Just like any other subshell this one can be exited by typing `exit` or pressing
 Now that you have a working dev environment you can create your first Scala project like this:
 
 ```bash
-cs launch giter8 -- devinsideyou/scala-seed  #Scala 2
+cs launch giter8 -- devinsideyou/scala-seed  # Scala 2
 ```
 ```bash
-cs launch giter8 -- devinsideyou/scala3-seed #Scala 3
+cs launch giter8 -- devinsideyou/scala3-seed # Scala 3
 ```
 Now `cd` into your newly created project and launch [sbt](https://www.scala-sbt.org/) by typing `sbt`. The template you just used to create a project will display a couple of useful aliases for you to try. For instance `r` to run the program or `t` to run the tests. Type `exit` or press `Ctrl+D` when you are done to exit `sbt`. Don't forget that you are still inside of the Nix subshell so type `exit` or press `Ctrl+D` again to end up back in your regular shell.
 

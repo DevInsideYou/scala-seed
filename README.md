@@ -3,14 +3,15 @@ This is an opinionated [Nix](https://nixos.org/) [flake](https://nixos.wiki/wiki
 
 * [Ammonite](https://ammonite.io/)
 * [Coursier](https://get-coursier.io/)
-* [GraalVM CE](https://www.graalvm.org/) based on [OpenJDK](https://openjdk.org/) 17
+* [GraalVM CE](https://www.graalvm.org/) based on [OpenJDK](https://openjdk.org/) 21
 * [Mill](https://com-lihaoyi.github.io/mill/mill/Intro_to_Mill.html)
 * [sbt](https://www.scala-sbt.org/)
 * [Scala CLI](https://scala-cli.virtuslab.org/)
 * [Scalafmt CLI](https://scalameta.org/scalafmt/)
 
 In fact it can create alternative subshells with these instead:
-* [GraalVM CE](https://www.graalvm.org/) based on [OpenJDK](https://openjdk.org/) 11
+* [Temurin](https://adoptium.net/temurin/releases/) 17
+* [Temurin](https://adoptium.net/temurin/releases/) 11
 * [OpenJDK](https://openjdk.org/) 8
 
 The first time you use this subshell these tools will be downloaded and cached. Once you exit the subshell they will no longer be on your path. The second run is instantaneous.
@@ -28,6 +29,11 @@ The first time you use this subshell these tools will be downloaded and cached. 
     ```bash
     sudo systemctl restart nix-daemon
     ```
+# Alternative unofficial installation
+Taken from https://zero-to-nix.com/start/install
+```bash
+curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
+```
 
 # Usage
 Use the default subshell (there is **NO** need to clone this repo) by running:
@@ -47,7 +53,10 @@ use flake github:devinsideyou/scala-seed/0c3b8c657b37eae320b073724d74390cf3162ed
 ```
 Alternative shells can be used as follows:
 ```bash
-nix develop github:devinsideyou/scala-seed#java17 # the same as the default
+nix develop github:devinsideyou/scala-seed#java21 # the same as the default
+```
+```bash
+nix develop github:devinsideyou/scala-seed#java17
 ```
 ```bash
 nix develop github:devinsideyou/scala-seed#java11

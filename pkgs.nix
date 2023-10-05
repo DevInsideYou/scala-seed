@@ -1,5 +1,12 @@
 nixpkgs: system: let
   makeOverlays = java: let
+    ammoniteOverlay = final: prev: {
+      # hardcoded because ammonite requires no more than 17 for now
+      ammonite = prev.ammonite.override {
+        jre = final.temurin-bin-17;
+      };
+    };
+
     millOverlay = final: prev: {
       mill = prev.mill.override {
         jre = final.jre;
@@ -14,12 +21,13 @@ nixpkgs: system: let
     scalaCliOverlay = final: prev: {
       scala-cli = prev.scala-cli.override {
         # hardcoded because scala-cli requires 17 or above
-        jre = final.graalvm17-ce;
+        jre = final.graalvm-ce;
       };
     };
   in [
     javaOverlay
     scalaCliOverlay
+    ammoniteOverlay
     millOverlay
   ];
 
@@ -30,10 +38,11 @@ nixpkgs: system: let
       inherit system overlays;
     };
 
-  default = pkgs17;
-  pkgs17 = makePackages "graalvm17-ce";
-  pkgs11 = makePackages "graalvm11-ce";
+  default = pkgs21;
+  pkgs21 = makePackages "graalvm-ce";
+  pkgs17 = makePackages "temurin-bin-17";
+  pkgs11 = makePackages "temurin-bin-11";
   pkgs8 = makePackages "openjdk8";
 in {
-  inherit default pkgs17 pkgs11 pkgs8;
+  inherit default pkgs21 pkgs17 pkgs11 pkgs8;
 }

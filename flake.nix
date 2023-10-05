@@ -37,6 +37,7 @@
       in {
         devShells = {
           default = makeShell pkgs.default;
+          java21 = makeShell pkgs.pkgs21;
           java17 = makeShell pkgs.pkgs17;
           java11 = makeShell pkgs.pkgs11;
           java8 = makeShell pkgs.pkgs8;

@@ -26,6 +26,7 @@
           p.mkShell {
             buildInputs = with p; [
               ammonite
+              bloop
               coursier
               jdk
               mill

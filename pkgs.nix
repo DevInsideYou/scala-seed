@@ -1,9 +1,25 @@
 nixpkgs: system: let
   makeOverlays = java: let
+    armOverlay = _: prev:
+      let
+        pkgsForx86 = import nixpkgs {
+          localSystem = "x86_64-darwin";
+        };
+      in
+        prev.lib.optionalAttrs (prev.stdenv.isDarwin && prev.stdenv.isAarch64) {
+          inherit (pkgsForx86) bloop;
+        };
+
     ammoniteOverlay = final: prev: {
       # hardcoded because ammonite requires no more than 17 for now
       ammonite = prev.ammonite.override {
         jre = final.temurin-bin-17;
+      };
+    };
+
+    bloopOverlay = final: prev: {
+      bloop = prev.bloop.override {
+        jre = final.jre;
       };
     };
 
@@ -26,6 +42,8 @@ nixpkgs: system: let
     };
   in [
     javaOverlay
+    armOverlay
+    bloopOverlay
     scalaCliOverlay
     ammoniteOverlay
     millOverlay

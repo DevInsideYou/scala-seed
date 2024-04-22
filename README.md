@@ -77,7 +77,7 @@ nix flake metadata github:devinsideyou/scala-seed
 ```
 And here is how you can see everything the flake has to offer:
 ```bash
-nix flake show github:devinsideyou/scala-seed
+nix flake show github:devinsideyou/scala-seed --all-systems
 ```
 Here is a useful incantation to pretty print a filtered list of what's on the path:
 ```bash

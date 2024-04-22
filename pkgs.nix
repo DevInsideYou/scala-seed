@@ -1,19 +1,24 @@
-nixpkgs: system: let
-  makeOverlays = java: let
-    armOverlay = _: prev:
-      let
-        pkgsForx86 = import nixpkgs {
-          localSystem = "x86_64-darwin";
-        };
-      in
-        prev.lib.optionalAttrs (prev.stdenv.isDarwin && prev.stdenv.isAarch64) {
-          inherit (pkgsForx86) bloop;
-        };
+nixpkgs: nixpkgsForGraal: system: let
+  makeOverlays = java: graal: let
+    armOverlay = _: prev: let
+      pkgsForx86 = import nixpkgs {
+        localSystem = "x86_64-darwin";
+      };
+    in
+      prev.lib.optionalAttrs (prev.stdenv.isDarwin && prev.stdenv.isAarch64) {
+        inherit (pkgsForx86) bloop;
+      };
 
-    ammoniteOverlay = final: prev: {
-      # hardcoded because ammonite requires no more than 17 for now
+    ammoniteOverlay = final: prev: let
+      pkgsForGraal = import nixpkgsForGraal {
+        inherit system;
+      };
+    in {
       ammonite = prev.ammonite.override {
-        jre = final.temurin-bin-17;
+        jre =
+          if graal
+          then pkgsForGraal.${java}
+          else final.${java};
       };
     };
 
@@ -29,15 +34,30 @@ nixpkgs: system: let
       };
     };
 
-    javaOverlay = final: _: {
-      jdk = final.${java};
-      jre = final.${java};
+    javaOverlay = final: _: let
+      pkgsForGraal = import nixpkgsForGraal {
+        inherit system;
+      };
+    in {
+      jdk =
+        if graal
+        then pkgsForGraal.${java}
+        else final.${java};
+
+      jre =
+        if graal
+        then pkgsForGraal.${java}
+        else final.${java};
     };
 
-    scalaCliOverlay = final: prev: {
+    scalaCliOverlay = _: prev: let
+      pkgsForGraal = import nixpkgsForGraal {
+        inherit system;
+      };
+    in {
       scala-cli = prev.scala-cli.override {
         # hardcoded because scala-cli requires 17 or above
-        jre = final.graalvm-ce;
+        jre = pkgsForGraal.graalvm-ce;
       };
     };
   in [
@@ -49,18 +69,18 @@ nixpkgs: system: let
     millOverlay
   ];
 
-  makePackages = java: let
-    overlays = makeOverlays java;
+  makePackages = java: graal: let
+    overlays = makeOverlays java graal;
   in
     import nixpkgs {
       inherit system overlays;
     };
 
   default = pkgs21;
-  pkgs21 = makePackages "graalvm-ce";
-  pkgs17 = makePackages "temurin-bin-17";
-  pkgs11 = makePackages "temurin-bin-11";
-  pkgs8 = makePackages "openjdk8";
+  pkgs21 = makePackages "graalvm-ce" true;
+  pkgs17 = makePackages "temurin-bin-17" false;
+  pkgs11 = makePackages "temurin-bin-11" false;
+  pkgs8 = makePackages "openjdk8" false;
 in {
   inherit default pkgs21 pkgs17 pkgs11 pkgs8;
 }

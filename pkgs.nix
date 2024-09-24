@@ -1,14 +1,5 @@
 nixpkgs: nixpkgsForGraal: system: let
   makeOverlays = java: graal: let
-    armOverlay = _: prev: let
-      pkgsForx86 = import nixpkgs {
-        localSystem = "x86_64-darwin";
-      };
-    in
-      prev.lib.optionalAttrs (prev.stdenv.isDarwin && prev.stdenv.isAarch64) {
-        inherit (pkgsForx86) bloop;
-      };
-
     ammoniteOverlay = final: prev: let
       pkgsForGraal = import nixpkgsForGraal {
         inherit system;
@@ -62,7 +53,6 @@ nixpkgs: nixpkgsForGraal: system: let
     };
   in [
     javaOverlay
-    armOverlay
     bloopOverlay
     scalaCliOverlay
     ammoniteOverlay

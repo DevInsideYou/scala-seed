@@ -19,9 +19,14 @@ nixpkgs: nixpkgsForGraal: system: let
       };
     };
 
-    millOverlay = final: prev: {
+    millOverlay = _: prev: let
+      pkgsForGraal = import nixpkgsForGraal {
+        inherit system;
+      };
+    in {
       mill = prev.mill.override {
-        jre = final.jre;
+        # hardcoded because mill requires 11 or above
+        jre = pkgsForGraal.graalvm-ce;
       };
     };
 

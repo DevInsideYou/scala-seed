@@ -4,13 +4,14 @@ This is an opinionated [Nix](https://nixos.org/) [flake](https://nixos.wiki/wiki
 * [Ammonite](https://ammonite.io/)
 * [Bloop](https://scalacenter.github.io/bloop/)
 * [Coursier](https://get-coursier.io/)
-* [GraalVM CE](https://www.graalvm.org/) based on [OpenJDK](https://openjdk.org/) 21
+* [GraalVM CE](https://www.graalvm.org/) based on [OpenJDK](https://openjdk.org/) 25
 * [Mill](https://com-lihaoyi.github.io/mill/mill/Intro_to_Mill.html)
 * [sbt](https://www.scala-sbt.org/)
 * [Scala CLI](https://scala-cli.virtuslab.org/)
 * [Scalafmt CLI](https://scalameta.org/scalafmt/)
 
 In fact it can create alternative subshells with these instead:
+* [GraalVM CE](https://www.graalvm.org/) based on [OpenJDK](https://openjdk.org/) 21
 * [Temurin](https://adoptium.net/temurin/releases/) 17
 * [Temurin](https://adoptium.net/temurin/releases/) 11
 * [OpenJDK](https://openjdk.org/) 8
@@ -54,7 +55,10 @@ use flake github:devinsideyou/scala-seed/0c3b8c657b37eae320b073724d74390cf3162ed
 ```
 Alternative shells can be used as follows:
 ```bash
-nix develop github:devinsideyou/scala-seed#java21 # the same as the default
+nix develop github:devinsideyou/scala-seed#java25 # the same as the default
+```
+```bash
+nix develop github:devinsideyou/scala-seed#java21
 ```
 ```bash
 nix develop github:devinsideyou/scala-seed#java17
@@ -110,4 +114,4 @@ PS
 
 Most Scala devs either use [Intellij IDEA](https://www.jetbrains.com/help/idea/discover-intellij-idea-for-scala.html) or the editors supported by [Metals](https://scalameta.org/metals/) - a Scala language server.
 
-This flake was tested in WSL 2 on Ubuntu-20.04 LTS, but it should work on Macs as well. I don't have a Mac, but I will set up CI eventually to test on them. Please report issues until then. Thank you!
+This flake was tested in WSL 2 on Ubuntu-20.04 LTS and on an m2 Mac. Eventually I will set up CI to test on other systems. Please report issues until then. Thank you!

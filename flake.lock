@@ -33,7 +33,7 @@
         "type": "github"
       }
     },
-    "nixpkgsForGraal": {
+    "nixpkgsForGraal21": {
       "locked": {
         "lastModified": 1708457099,
         "narHash": "sha256-mwfR9G5JS5jhd7UUD1/MHLY3HKSSCmJY1t5sW/BRBx8=",
@@ -53,7 +53,7 @@
       "inputs": {
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs",
-        "nixpkgsForGraal": "nixpkgsForGraal"
+        "nixpkgsForGraal21": "nixpkgsForGraal21"
       }
     },
     "systems": {

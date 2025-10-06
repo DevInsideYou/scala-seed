@@ -3,14 +3,14 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs";
-    nixpkgsForGraal.url = "github:nixos/nixpkgs?rev=1939434b4ae04cb855edec936573c778a9ddeab0";
+    nixpkgsForGraal21.url = "github:nixos/nixpkgs?rev=1939434b4ae04cb855edec936573c778a9ddeab0";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
   outputs = {
     self,
     nixpkgs,
-    nixpkgsForGraal,
+    nixpkgsForGraal21,
     flake-utils,
   }: let
     supportedSystems = [
@@ -22,7 +22,7 @@
   in
     flake-utils.lib.eachSystem supportedSystems (
       system: let
-        pkgs = import ./pkgs.nix nixpkgs nixpkgsForGraal system;
+        pkgs = import ./pkgs.nix nixpkgs nixpkgsForGraal21 system;
 
         makeShell = p:
           p.mkShell {
@@ -40,6 +40,7 @@
       in {
         devShells = {
           default = makeShell pkgs.default;
+          java25 = makeShell pkgs.pkgs25;
           java21 = makeShell pkgs.pkgs21;
           java17 = makeShell pkgs.pkgs17;
           java11 = makeShell pkgs.pkgs11;

@@ -1,81 +1,95 @@
-nixpkgs: nixpkgsForGraal: system: let
-  makeOverlays = java: graal: let
-    ammoniteOverlay = final: prev: let
-      pkgsForGraal = import nixpkgsForGraal {
-        inherit system;
-      };
-    in {
+nixpkgs: nixpkgsForGraal21: system: let
+  makeOverlays = java: javaVersion: let
+    ammoniteOverlay = final: prev: {
       ammonite = prev.ammonite.override {
-        jre =
-          if graal
-          then pkgsForGraal.${java}
-          else final.${java};
-      };
-    };
-
-    bloopOverlay = final: prev: {
-      bloop = prev.bloop.override {
         jre = final.jre;
       };
     };
 
-    millOverlay = _: prev: let
-      pkgsForGraal = import nixpkgsForGraal {
+    bloopOverlay = final: prev: let
+      pkgsForGraal21 = import nixpkgsForGraal21 {
+        inherit system;
+      };
+    in {
+      bloop = prev.bloop.override {
+        # hardcoded because bloop requires 17 or above
+        jre =
+          if javaVersion == 21
+          then pkgsForGraal21.${java} # graal 21
+          else if javaVersion < 17
+          then final.graalvm-ce # graal 25 at the time # this override global java... why?
+          else final.jre;
+      };
+    };
+
+    millOverlay = final: prev: let
+      pkgsForGraal21 = import nixpkgsForGraal21 {
         inherit system;
       };
     in {
       mill = prev.mill.override {
         # hardcoded because mill requires 11 or above
-        jre = pkgsForGraal.graalvm-ce;
+        jre =
+          if javaVersion == 21
+          then pkgsForGraal21.${java} # graal 21
+          else if javaVersion < 11
+          then final.graalvm-ce # graal 25 at the time
+          else final.${java};
       };
     };
 
     javaOverlay = final: _: let
-      pkgsForGraal = import nixpkgsForGraal {
+      pkgsForGraal21 = import nixpkgsForGraal21 {
         inherit system;
       };
     in {
       jdk =
-        if graal
-        then pkgsForGraal.${java}
+        if javaVersion == 21
+        then pkgsForGraal21.${java}
         else final.${java};
 
       jre =
-        if graal
-        then pkgsForGraal.${java}
+        if javaVersion == 21
+        then pkgsForGraal21.${java}
         else final.${java};
     };
 
-    scalaCliOverlay = _: prev: let
-      pkgsForGraal = import nixpkgsForGraal {
+    scalaCliOverlay = final: prev: let
+      pkgsForGraal21 = import nixpkgsForGraal21 {
         inherit system;
       };
     in {
       scala-cli = prev.scala-cli.override {
         # hardcoded because scala-cli requires 17 or above
-        jre = pkgsForGraal.graalvm-ce;
+        jre =
+          if javaVersion == 21
+          then pkgsForGraal21.${java} # graal 21
+          else if javaVersion < 17
+          then final.graalvm-ce # graal 25 at the time
+          else final.${java};
       };
     };
   in [
     javaOverlay
-    bloopOverlay
+    # bloopOverlay
     scalaCliOverlay
     ammoniteOverlay
     millOverlay
   ];
 
-  makePackages = java: graal: let
-    overlays = makeOverlays java graal;
+  makePackages = java: javaVersion: let
+    overlays = makeOverlays java javaVersion;
   in
     import nixpkgs {
       inherit system overlays;
     };
 
-  default = pkgs21;
-  pkgs21 = makePackages "graalvm-ce" true;
-  pkgs17 = makePackages "temurin-bin-17" false;
-  pkgs11 = makePackages "temurin-bin-11" false;
-  pkgs8 = makePackages "openjdk8" false;
+  default = pkgs25;
+  pkgs25 = makePackages "graalvm-ce" 25;
+  pkgs21 = makePackages "graalvm-ce" 21;
+  pkgs17 = makePackages "temurin-bin-17" 17;
+  pkgs11 = makePackages "temurin-bin-11" 11;
+  pkgs8 = makePackages "openjdk8" 8;
 in {
-  inherit default pkgs21 pkgs17 pkgs11 pkgs8;
+  inherit default pkgs25 pkgs21 pkgs17 pkgs11 pkgs8;
 }

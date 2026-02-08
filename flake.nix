@@ -7,24 +7,28 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    nixpkgsForGraal21,
-    flake-utils,
-  }: let
-    supportedSystems = [
-      "aarch64-darwin"
-      "aarch64-linux"
-      "x86_64-linux"
-      "x86_64-darwin"
-    ];
-  in
+  outputs =
+    {
+      self,
+      nixpkgs,
+      nixpkgsForGraal21,
+      flake-utils,
+    }:
+    let
+      supportedSystems = [
+        "aarch64-darwin"
+        "aarch64-linux"
+        "x86_64-linux"
+        "x86_64-darwin"
+      ];
+    in
     flake-utils.lib.eachSystem supportedSystems (
-      system: let
+      system:
+      let
         pkgs = import ./pkgs.nix nixpkgs nixpkgsForGraal21 system;
 
-        makeShell = p:
+        makeShell =
+          p:
           p.mkShell {
             buildInputs = with p; [
               ammonite
@@ -37,7 +41,8 @@
               scalafmt
             ];
           };
-      in {
+      in
+      {
         devShells = {
           default = makeShell pkgs.default;
           java25 = makeShell pkgs.pkgs25;
@@ -47,7 +52,7 @@
           java8 = makeShell pkgs.pkgs8;
         };
 
-        formatter = pkgs.default.alejandra;
+        formatter = pkgs.default.nixfmt;
       }
     );
 }

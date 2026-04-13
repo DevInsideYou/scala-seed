@@ -29,8 +29,8 @@
 
         makeShell =
           p:
-          p.mkShell {
-            buildInputs = with p; [
+          let
+            scala = with p; [
               ammonite
               bloop
               coursier
@@ -40,6 +40,18 @@
               scala-cli
               scalafmt
             ];
+            scalaJS = with p; [
+              nodejs
+            ];
+            scalaNative = with p; [
+              boehmgc
+              clang
+              libunwind
+              zlib
+            ];
+          in
+          p.mkShell {
+            buildInputs = scala ++ scalaJS ++ scalaNative;
           };
       in
       {

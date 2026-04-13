@@ -66,6 +66,10 @@ let
           jre = if javaVersion == 21 then pkgsForGraal21.${java} else final.${java};
         };
 
+      nodejsOverlay = final: _: {
+        nodejs = final.nodejs_24;
+      };
+
       scalaCliOverlay =
         final: prev:
         let
@@ -93,6 +97,7 @@ let
       scalaCliOverlay
       ammoniteOverlay
       millOverlay
+      nodejsOverlay
     ];
 
   makePackages =

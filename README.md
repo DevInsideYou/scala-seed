@@ -10,6 +10,17 @@ This is an opinionated [Nix](https://nixos.org/) [flake](https://nixos.wiki/wiki
 * [Scala CLI](https://scala-cli.virtuslab.org/)
 * [Scalafmt CLI](https://scalameta.org/scalafmt/)
 
+As well as the following [Scala.js](https://www.scala-js.org/) dependencies:
+
+* [Node.js](https://nodejs.org/) 24
+
+As well as the following [Scala Native](https://scala-native.org/) dependencies:
+
+* [Boehm GC](https://www.hboehm.info/gc/)
+* [Clang](https://clang.llvm.org/)
+* [libunwind](https://www.nongnu.org/libunwind/)
+* [zlib](https://zlib.net/)
+
 In fact it can create alternative subshells with these instead:
 * [GraalVM CE](https://www.graalvm.org/) based on [OpenJDK](https://openjdk.org/) 21
 * [Temurin](https://adoptium.net/temurin/releases/) 17

@@ -34,6 +34,7 @@
               ammonite
               bloop
               coursier
+              giter8
               jdk
               mill
               sbt
@@ -62,6 +63,19 @@
           java17 = makeShell pkgs.pkgs17;
           java11 = makeShell pkgs.pkgs11;
           java8 = makeShell pkgs.pkgs8;
+        };
+
+        apps.default = {
+          type = "app";
+          program = toString (
+            pkgs.default.writeShellScript "g8-wrapper" ''
+              if [ $# -eq 0 ]; then
+                exec ${pkgs.default.giter8}/bin/g8 devinsideyou/scala3-seed.g8
+              else
+                exec ${pkgs.default.giter8}/bin/g8 "$@"
+              fi
+            ''
+          );
         };
 
         formatter = pkgs.default.nixfmt;

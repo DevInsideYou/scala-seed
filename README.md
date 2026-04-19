@@ -4,6 +4,7 @@ This is an opinionated [Nix](https://nixos.org/) [flake](https://nixos.wiki/wiki
 * [Ammonite](https://ammonite.io/)
 * [Bloop](https://scalacenter.github.io/bloop/)
 * [Coursier](https://get-coursier.io/)
+* [giter8](https://www.foundweekends.org/giter8/)
 * [GraalVM CE](https://www.graalvm.org/) based on [OpenJDK](https://openjdk.org/) 25
 * [Mill](https://com-lihaoyi.github.io/mill/mill/Intro_to_Mill.html)
 * [sbt](https://www.scala-sbt.org/)
@@ -105,14 +106,20 @@ Just like any other subshell this one can be exited by typing `exit` or pressing
 [![Watch on YouTube](resources/thumbnail_youtube.jpg)](https://youtu.be/HnoP7JZn2MQ "Watch a Demo on YouTube!")
 
 # Scala first steps
-Now that you have a working dev environment you can create your first Scala project like this:
+You can create your first Scala project straight from this flake — no dev shell required:
+```bash
+nix run github:devinsideyou/scala-seed # for Scala 3 (default)
+```
+```bash
+nix run github:devinsideyou/scala-seed -- devinsideyou/scala-seed # for Scala 2
+```
 
-```bash
-cs launch giter8 -- devinsideyou/scala-seed  # Scala 2
-```
-```bash
-cs launch giter8 -- devinsideyou/scala3-seed # Scala 3
-```
+> [!IMPORTANT]
+> If all you did so far was installing `nix`, enabling `flakes` and executing `nix run` from above, then for the following `cd` step to work you will need to run `nix develop` from the beginning of this doc after you `cd` into your newly created directory or even better use `direnv` (also described in this doc). In fact if you already had `direnv` installed and configured you will notice that the template you just used already comes with a preconfigured [.envrc](https://github.com/DevInsideYou/scala3-seed.g8/blob/master/src/main/g8/.envrc) file that uses this flake as you will be prompted to run the `direnv allow` command.
+
+> [!CAUTION]
+> Always check the `.envrc` before running `direnv allow` since it can **r**un potentially destructive **c**ommands.
+
 Now `cd` into your newly created project and launch [sbt](https://www.scala-sbt.org/) by typing `sbt`. The template you just used to create a project will display a couple of useful aliases for you to try. For instance `r` to run the program or `t` to run the tests. Type `exit` or press `Ctrl+D` when you are done to exit `sbt`. Don't forget that you are still inside of the Nix subshell so type `exit` or press `Ctrl+D` again to end up back in your regular shell.
 
 Here is a [Scala Crash Course](https://www.youtube.com/watch?v=-xRfJcwhy7A) and here is a [Functional Programming Crash Course](https://www.youtube.com/watch?v=XXkYBncbz0c).

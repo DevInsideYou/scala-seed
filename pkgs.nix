@@ -13,6 +13,12 @@ let
         };
       };
 
+      giter8Overlay = final: prev: {
+        giter8 = prev.giter8.override {
+          jre = final.jre;
+        };
+      };
+
       bloopOverlay =
         final: prev:
         let
@@ -96,6 +102,7 @@ let
       # bloopOverlay
       scalaCliOverlay
       ammoniteOverlay
+      giter8Overlay
       millOverlay
       nodejsOverlay
     ];

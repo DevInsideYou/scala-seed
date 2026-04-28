@@ -7,11 +7,30 @@ let
         graalvm-ce = final.graalvmPackages.graalvm-ce;
       };
 
-      ammoniteOverlay = final: prev: {
-        ammonite = prev.ammonite.override {
-          jre = final.jre;
+      ammoniteOverlay =
+        final: prev:
+        let
+          pkgsForGraal21 = import nixpkgsForGraal21 {
+            inherit system;
+          };
+          # hardcoded because ammonite requires 11 or above
+          chosenJre =
+            if javaVersion == 21 then
+              pkgsForGraal21.${java} # graal 21
+            else if javaVersion < 11 then
+              final.graalvm-ce # graal 25 at the time
+            else
+              final.${java};
+        in
+        {
+          ammonite = (prev.ammonite.override { jre = chosenJre; }).overrideAttrs (old: {
+            # the upstream amm wrapper defers to $JAVA_HOME if set, which
+            # bypasses our chosen jre when the devshell's jdk is older.
+            postFixup = (old.postFixup or "") + ''
+              sed -i 's|JAVACMD="$JAVA_HOME/bin/java"|JAVACMD="${chosenJre}/bin/java"|' $out/bin/amm
+            '';
+          });
         };
-      };
 
       giter8Overlay = final: prev: {
         giter8 = prev.giter8.override {

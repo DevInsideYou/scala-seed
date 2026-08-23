@@ -36,6 +36,7 @@
               coursier
               giter8
               jdk
+              metals
               mill
               sbt
               scala-cli

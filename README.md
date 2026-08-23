@@ -6,6 +6,8 @@ This is an opinionated [Nix](https://nixos.org/) [flake](https://nixos.wiki/wiki
 * [Coursier](https://get-coursier.io/)
 * [giter8](https://www.foundweekends.org/giter8/)
 * [GraalVM CE](https://www.graalvm.org/) based on [OpenJDK](https://openjdk.org/) 25
+* [Metals](https://scalameta.org/metals/)
+* [Metals MCP Server](https://scalameta.org/metals/docs/features/mcp/)
 * [Mill](https://com-lihaoyi.github.io/mill/mill/Intro_to_Mill.html)
 * [sbt](https://www.scala-sbt.org/)
 * [Scala CLI](https://scala-cli.virtuslab.org/)

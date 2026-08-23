@@ -3,126 +3,49 @@ let
   makeOverlays =
     java: javaVersion:
     let
+      pkgsForGraal21 = import nixpkgsForGraal21 {
+        inherit system;
+      };
+
+      chosenJre = if javaVersion == 21 then pkgsForGraal21.${java} else null;
+
       graalAliasOverlay = final: prev: {
         graalvm-ce = final.graalvmPackages.graalvm-ce;
       };
 
-      ammoniteOverlay =
-        final: prev:
-        let
-          pkgsForGraal21 = import nixpkgsForGraal21 {
-            inherit system;
-          };
-          # hardcoded because ammonite requires 11 or above
-          chosenJre =
-            if javaVersion == 21 then
-              pkgsForGraal21.${java} # graal 21
-            else if javaVersion < 11 then
-              final.graalvm-ce # graal 25 at the time
-            else
-              final.${java};
-        in
-        {
-          ammonite = (prev.ammonite.override { jre = chosenJre; }).overrideAttrs (old: {
-            # the upstream amm wrapper defers to $JAVA_HOME if set, which
-            # bypasses our chosen jre when the devshell's jdk is older.
-            postFixup = (old.postFixup or "") + ''
-              sed -i 's|JAVACMD="$JAVA_HOME/bin/java"|JAVACMD="${chosenJre}/bin/java"|' $out/bin/amm
-            '';
-          });
-        };
-
-      giter8Overlay = final: prev: {
-        giter8 = prev.giter8.override {
-          jre = final.jre;
-        };
+      javaOverlay = final: _: {
+        jdk = if chosenJre != null then chosenJre else final.${java};
+        jre = if chosenJre != null then chosenJre else final.${java};
       };
 
-      bloopOverlay =
+      # Every tool here asserts on jre.version, so anything the devshell's own
+      # jdk is too old to run gets the newest jvm instead. The project still
+      # compiles against final.jdk; only the tool's own runtime moves.
+      jreFloorOverlay =
         final: prev:
         let
-          pkgsForGraal21 = import nixpkgsForGraal21 {
-            inherit system;
-          };
+          atLeast = floor: if javaVersion >= floor then final.jre else final.graalvm-ce;
         in
         {
-          bloop = prev.bloop.override {
-            # hardcoded because bloop requires 17 or above
-            jre =
-              if javaVersion == 21 then
-                pkgsForGraal21.${java} # graal 21
-              else if javaVersion < 17 then
-                final.graalvm-ce # graal 25 at the time # this override global java... why?
-              else
-                final.jre;
-          };
-        };
+          ammonite = prev.ammonite.override { jre = atLeast 11; };
+          bloop = prev.bloop.override { jre = atLeast 17; };
+          metals = prev.metals.override { jre = atLeast 17; };
+          mill = prev.mill.override { jre = atLeast 17; };
+          sbt = prev.sbt.override { jre = atLeast 17; };
+          scala-cli = prev.scala-cli.override { jre = atLeast 17; };
 
-      millOverlay =
-        final: prev:
-        let
-          pkgsForGraal21 = import nixpkgsForGraal21 {
-            inherit system;
-          };
-        in
-        {
-          mill = prev.mill.override {
-            # hardcoded because mill requires 11 or above
-            jre =
-              if javaVersion == 21 then
-                pkgsForGraal21.${java} # graal 21
-              else if javaVersion < 11 then
-                final.graalvm-ce # graal 25 at the time
-              else
-                final.${java};
-          };
-        };
-
-      javaOverlay =
-        final: _:
-        let
-          pkgsForGraal21 = import nixpkgsForGraal21 {
-            inherit system;
-          };
-        in
-        {
-          jdk = if javaVersion == 21 then pkgsForGraal21.${java} else final.${java};
-
-          jre = if javaVersion == 21 then pkgsForGraal21.${java} else final.${java};
+          # coursier, giter8 and scalafmt have no floor: they run on the
+          # devshell's own jdk, which is the point of them being here.
         };
 
       nodejsOverlay = final: _: {
         nodejs = final.nodejs_24;
       };
-
-      scalaCliOverlay =
-        final: prev:
-        let
-          pkgsForGraal21 = import nixpkgsForGraal21 {
-            inherit system;
-          };
-        in
-        {
-          scala-cli = prev.scala-cli.override {
-            # hardcoded because scala-cli requires 17 or above
-            jre =
-              if javaVersion == 21 then
-                pkgsForGraal21.${java} # graal 21
-              else if javaVersion < 17 then
-                final.graalvm-ce # graal 25 at the time
-              else
-                final.${java};
-          };
-        };
     in
     [
       graalAliasOverlay
       javaOverlay
-      # bloopOverlay
-      scalaCliOverlay
-      ammoniteOverlay
-      giter8Overlay
-      millOverlay
+      jreFloorOverlay
       nodejsOverlay
     ];
 

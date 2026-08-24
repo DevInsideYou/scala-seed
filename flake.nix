@@ -29,18 +29,21 @@
         makeShell =
           p:
           let
-            scala = with p; [
-              ammonite
-              bloop
-              coursier
-              giter8
-              jdk
-              metals
-              mill
-              sbt
-              scala-cli
-              scalafmt
-            ];
+            scala =
+              with p;
+              [
+                ammonite
+                coursier
+                giter8
+                jdk
+                metals
+                mill
+                sbt
+                scala-cli
+                scalafmt
+              ]
+              # bloop has no aarch64-linux build upstream
+              ++ lib.optional bloop.meta.available bloop;
             scalaJS = with p; [
               nodejs
             ];

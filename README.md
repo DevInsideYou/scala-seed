@@ -2,7 +2,7 @@
 This is an opinionated [Nix](https://nixos.org/) [flake](https://nixos.wiki/wiki/Flakes) for getting started with the [Scala](https://scala-lang.org/) programming language. It creates a development subshell with the following Scala tools on the path:
 
 * [Ammonite](https://ammonite.io/)
-* [Bloop](https://scalacenter.github.io/bloop/)
+* [Bloop](https://scalacenter.github.io/bloop/) (not available on `aarch64-linux`)
 * [Coursier](https://get-coursier.io/)
 * [giter8](https://www.foundweekends.org/giter8/)
 * [GraalVM CE](https://www.graalvm.org/) based on [OpenJDK](https://openjdk.org/) 25

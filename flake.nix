@@ -79,7 +79,7 @@
           );
         };
 
-        formatter = pkgs.default.nixfmt;
+        formatter = pkgs.default.nixfmt-tree;
       }
     );
 }
